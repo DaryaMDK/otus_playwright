@@ -1,8 +1,8 @@
 const axios = require('axios');
-const { baseURL, credentials } = require('../config/config');
+const { baseURL } = require('../config/config');
 
 const authService = {
-    async login() {
+    async login(credentials) {
         const response = await axios.post(`${baseURL}/auth/login`, credentials);
         return response.data.token;
     },
