@@ -1,11 +1,11 @@
-const axios = require('axios');
-const { baseURL } = require('../config/config');
+import { post } from 'axios';
+import { baseURL } from '../config/config';
 
 const authService = {
     async login(credentials) {
-        const response = await axios.post(`${baseURL}/auth/login`, credentials);
+        const response = await post(`${baseURL}/Account/v1/GenerateToken`, credentials);
         return response.data.token;
     },
 };
 
-module.exports = authService;
+export default authService;

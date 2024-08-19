@@ -1,3 +1,1 @@
-module.exports = {
-    baseURL: 'https://bookstore.demoqa.com',
-};
+export const baseURL = 'https://bookstore.demoqa.com';
