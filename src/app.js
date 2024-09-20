@@ -6,7 +6,7 @@ const scores = {
 
 function getScore(scores) {
     let totalScore = 0;
-    for (let key in scores) {
+    for (const key in scores) {
         totalScore += scores[key];
     }
     return totalScore;

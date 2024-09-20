@@ -1,82 +1,35 @@
-import axios from "axios";
+import { login } from '../framework/services/authService';
+import { getUserInfo, deleteUser } from '../framework/services/userService';
 
-const baseUrl = "https://bookstore.demoqa.com";
+let token;
+const userId = '1eebddab-2e22-4357-95ef-ed168d3304a7';
 
-//Создание пользователя успешно
-axios
-    .post(baseUrl + "/Account/v1/User", {
-        userName: "daria",
-        password: "Test123*334",
-    })
-    .then(function (response) {
-        console.log(response.status == 201);
-    })
-    .catch(function (error) {
-        console.log(error);
+beforeAll(async () => {
+    const credentials = { username: 'testDari', password: 'testDaria132' };
+    token = await login(credentials);
+});
+
+describe('User API tests', () => {
+    test('Авторизация', async () => {
+        expect(token).toBeDefined();
     });
 
-//Создание пользователя c ошибкой, логин уже используется
-axios
-    .post(baseUrl + "/Account/v1/User", {
-        userName: "daria",
-        password: "Test123*334",
-    })
-    .then(function (response) {
-        console.log(response.message == "User exists!");
-    })
-    .catch(function (error) {
-        console.log(error);
+    test('Получение информации о пользователе', async () => {
+        const userInfo = await getUserInfo(token, userId);
+        expect(userInfo).toHaveProperty('userId', userId);
+        expect(userInfo).toHaveProperty('username');
     });
 
-//Создание пользователя c ошибкой, пароль не подходит
-axios
-    .post(baseUrl + "/Account/v1/User", {
-        userName: "daria",
-        password: "12345",
-    })
-    .then(function (response) {
-        console.log((response.status = 400));
-    })
-    .catch(function (error) {
-        console.log(error);
+    test('Получение информации о пользователе - пользователь неавторизован', async () => {
+        try {
+            await getUserInfo('1232322', userId);
+        } catch (error) {
+            expect(error.response.status).toBe(401);
+        }
     });
 
-//Генерация токена успешно
-axios
-    .post(baseUrl + "/Account/AccountV1UserPost", {
-        userName: "daria",
-        password: "Test123*334",
-    })
-    .then(function (response) {
-        console.log((response.status = 200));
-        console.log(
-            "Content-Type:",
-            response.headers["application/json; charset=utf-8 "],
-        );
-    })
-    .catch(function (error) {
-        console.log(error);
+    test('Удаление пользователя', async () => {
+        const status = await deleteUser(token, userId);
+        expect(status).toBe(200);
     });
-
-//Генерация токена c ошибкой
-axios
-    .post(baseUrl + "/Account/AccountV1UserPost", {
-        userName: "daria",
-        password: "Test123*334",
-    })
-    .then(function (response) {
-        console.log((response.status = 200));
-        console.log(
-            "Content-Type:",
-            response.data ==
-            {
-                token: null,
-                expires: null,
-                status: "Failed",
-                result: "User authorization failed.",
-            },
-        );
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
+});
