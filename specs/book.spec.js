@@ -1,12 +1,12 @@
 import { create, update, get, deleteBook } from '../framework/services/bookService';
-import { login } from '../framework/services/authService';
 import { generateFakeBook } from '../framework/fixtures/book';
+import accountService from '../framework/services/accountService';
 
 let token;
 
 beforeAll(async () => {
     const credentials = { username: 'testDari', password: 'testDaria132' };
-    token = await login(credentials);
+    token = await accountService.generateToken(credentials);
 });
 
 describe('Book API Tests', () => {
