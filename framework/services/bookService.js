@@ -11,4 +11,4 @@ const api = _create({
 export function create(bookData) { return api.post('/books', bookData); }
 export function update(id, bookData) { return api.put(`/books/${id}`, bookData); }
 export function get(id) { return api.get(`/books/${id}`); }
-export function deleteBook (id) { return api.deleteBook(`/books/${id}`); }
+export function deleteBook(id) { return api.delete(`/books/${id}`); } 
